@@ -1,37 +1,30 @@
 #include "analyzer.h"
+#include "utils.h"
+#include "string.h"
 
-int gest_arg(t_info *info, int argc, char **argv) {
-	int ch;
+void	show_all_interfaces(t_analyzer *analyzer) {
+    pcap_if_t *alldevs;
+	char errbuf[PCAP_ERRBUF_SIZE];    
 
-	while ((ch = getopt(argc, argv, "i:o:v:h")) != -1)
-	{
-		switch (ch)
-		{
-		case 'i':
-			info->interface = optarg;
-			printf("Interface choosed : %s\n", info->interface);
-			break;
-		case 'o':
-			info->file = optarg;
-			printf("File choosed for the offline analysis : %s\n", info->file);
-			break;
-		case 'v':
-			info->verbose = atoi(optarg); //Meilleure vérification ? compris entre 1 et 3 et que des chiffres
-			printf("Verbose level choosed : %d\n", info->verbose);
-			break;
-		case 'h':
-			usage();
-			break;
-		default:
-			usage();
-			break;
-		}
+    memset(errbuf, '0', PCAP_ERRBUF_SIZE);
+	if (pcap_findalldevs(&alldevs, errbuf) != 0) {
+		exit_failure(analyzer, "Error: findalldevs\n%s", errbuf);
 	}
-	argc -= optind;
-	argv += optind;
-	return 0;
+	while (alldevs != NULL) {
+		printf("%s%s%s: %s\n", CSI_GREEN, alldevs->name, CSI_RESET, alldevs->description);
+		alldevs = alldevs->next;
+	}
 }
 
 int     main(int argc, char **argv) {
-    
+	t_analyzer analyzer;
+
+	init_struct(&analyzer);
+	gest_arg(&analyzer, argc, argv);
+
+	if (analyzer.show_all_interfaces) {
+		show_all_interfaces(&analyzer);
+		return (0);
+	}
+	return (0);
 }
