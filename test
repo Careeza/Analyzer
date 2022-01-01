@@ -1,0 +1,15 @@
+ANALYSER
+eth0: (null)
+lo: (null)
+any: Pseudo-device that captures on all interfaces
+bluetooth-monitor: Bluetooth Linux Monitor
+nflog: Linux netfilter log (NFLOG) interface
+nfqueue: Linux netfilter queue (NFQUEUE) interface
+tunl0: (null)
+ip6tnl0: (null)
+Interface used eth0
+eth0
+ICI 1
+ICI 2
+Frame 0. 70 bytes	
+

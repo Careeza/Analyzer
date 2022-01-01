@@ -1,0 +1,7 @@
+colors
+-t
+protection .h
+
+
+➜  TP for name in **/*.c; do echo \"SRC += \$name\"; done > src.mk
+➜  TP for name in **/*.c; do echo "SRC += $name"; done > src.mk 
