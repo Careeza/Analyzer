@@ -16,7 +16,7 @@ void packet_call_back(u_char *user, const struct pcap_pkthdr *h, const u_char *b
 	double time = (h->ts.tv_sec - start_s) + (h->ts.tv_usec - start_ms) / 1000000.0;
 	printf("%.4lf FRAME %u (%i bytes)", time, pkt_nb, h->len);
 //	parse_ethernet(bytes);
-	printf("%d\n", ETH_P_IP);
+	//printf("%d\n", ETH_P_IP);
 	printf("\n");
 	pkt_nb++;
 }
