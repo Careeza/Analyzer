@@ -22,9 +22,14 @@ int     main(int argc, char **argv) {
 	init_struct(&analyzer);
 	gest_arg(&analyzer, argc, argv);
 
-	if (analyzer.show_all_interfaces) {
+	if (analyzer.info.show_all_interfaces) {
 		show_all_interfaces(&analyzer);
 		return (0);
+	}
+	if (analyzer.info.online) {
+		online_analysis(&analyzer);
+	} else {
+		offline_analysis(&analyzer);
 	}
 	return (0);
 }

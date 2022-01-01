@@ -1,5 +1,9 @@
 {
     "files.associations": {
-        "typeinfo": "c"
+        "typeinfo": "c",
+        "analyzer.h": "c",
+        "utils.h": "c",
+        "chrono": "cpp",
+        "ctime": "cpp"
     }
 }
