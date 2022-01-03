@@ -8,7 +8,10 @@
 # define CSI_GREEN CSI   "32;01m"
 # define CSI_WHITE CSI   "37;01m"
 # define CSI_BLUE CSI    "34;01m"
+# define CSI_CYAN CSI    "96;01m"
 # define CSI_YELLOW CSI  "33;01m"
+# define CSI_MAGENTA CSI "35;01m"
+# define CSI_PURPLE CSI  "92;01m"
 # define CSI_RED CSI     "31m"
 # define CSI_RESET CSI   "0m"
 

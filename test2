@@ -1,0 +1,58 @@
+Interface choosed : [32;01many[0m
+0.0000 FRAME 1 (56 bytes)
+[34;01mEthernet[0m
+[34;01mSRC:      [0m00:00:00:00:00:00
+[34;01mDST:      [0m03:04:00:06:00:00
+[34;01mTYPE:     [0mIPv4
+	[33;01mIP[0m
+	[33;01mVERSION:  [0m4
+	[33;01mIHL:      [0m5
+	[33;01mTOS:      [0m0x0000
+	[33;01mLENGTH:   [0m40
+	[33;01mID:       [0m0XB979
+	[33;01mFLAGS     [0m[ NONE ]
+	[33;01mFRAG OFF  [0m0
+	[33;01mPROTOCOL  [0mTCP
+	[33;01mCHKSUM    [0m0454
+	[33;01mSRC ADDR  [0m127.0.0.1
+	[33;01mDST ADDR  [0m127.0.0.1
+		[96;01mTOT_LEN = 5[0m
+		[96;01mTCP[0m
+		[96;01mSRC PORT: [0m0
+		[96;01mDST PORT: [0m0
+		[96;01mSEQ n     [0m2441310255
+		[96;01mACK n     [0m0
+		[96;01mDOFF:     [0m5
+		[96;01mFLAGS     [0m[ SYN ]
+		[96;01mWINDOW:   [0m65535
+		[96;01mCHECKSUM: [0m0XB02D
+		[96;01mURG PTR:  [0m0
+
+0.0000 FRAME 2 (56 bytes)
+[34;01mEthernet[0m
+[34;01mSRC:      [0m00:00:00:00:00:00
+[34;01mDST:      [0m03:04:00:06:00:00
+[34;01mTYPE:     [0mIPv4
+	[33;01mIP[0m
+	[33;01mVERSION:  [0m4
+	[33;01mIHL:      [0m5
+	[33;01mTOS:      [0m0x0000
+	[33;01mLENGTH:   [0m40
+	[33;01mID:       [0m0X0000
+	[33;01mFLAGS     [0m[ DF ]
+	[33;01mFRAG OFF  [0m16384
+	[33;01mPROTOCOL  [0mTCP
+	[33;01mCHKSUM    [0m3CCE
+	[33;01mSRC ADDR  [0m127.0.0.1
+	[33;01mDST ADDR  [0m127.0.0.1
+		[96;01mTOT_LEN = 5[0m
+		[96;01mTCP[0m
+		[96;01mSRC PORT: [0m0
+		[96;01mDST PORT: [0m0
+		[96;01mSEQ n     [0m0
+		[96;01mACK n     [0m2441310256
+		[96;01mDOFF:     [0m5
+		[96;01mFLAGS     [0m[ RST ACK ]
+		[96;01mWINDOW:   [0m0
+		[96;01mCHECKSUM: [0m0XB01A
+		[96;01mURG PTR:  [0m0

@@ -21,6 +21,8 @@ typedef struct s_info {
 typedef struct s_analyzer {
 	t_info	info;
 	pcap_t  *handle;
+	char	*format;
+	char	*protocol;
 } t_analyzer;
 
 void    start_analysis(t_analyzer *analyzer);

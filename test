@@ -1,15 +1,5 @@
-ANALYSER
-eth0: (null)
-lo: (null)
-any: Pseudo-device that captures on all interfaces
-bluetooth-monitor: Bluetooth Linux Monitor
-nflog: Linux netfilter log (NFLOG) interface
-nfqueue: Linux netfilter queue (NFQUEUE) interface
-tunl0: (null)
-ip6tnl0: (null)
-Interface used eth0
-eth0
-ICI 1
-ICI 2
-Frame 0. 70 bytes	
+21:47:20.236683 IP (tos 0x0, ttl 255, id 26982, offset 0, flags [none], proto TCP (6), length 40)
+    localhost.0 > localhost.0: Flags [S], cksum 0xd129 (correct), seq 2861970976, win 65535, length 0
+21:47:20.236697 IP (tos 0x0, ttl 64, id 0, offset 0, flags [DF], proto TCP (6), length 40)
+    localhost.0 > localhost.0: Flags [R.], cksum 0xd116 (correct), seq 0, ack 2861970977, win 0, length 0
 

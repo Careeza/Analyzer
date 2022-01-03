@@ -1,5 +1,6 @@
 #include "analyzer.h"
 #include "utils.h"
+#include "parser.h"
 
 void packet_call_back(u_char *user, const struct pcap_pkthdr *h, const u_char *bytes) {	
 	static unsigned int		pkt_nb = 1;
@@ -15,7 +16,7 @@ void packet_call_back(u_char *user, const struct pcap_pkthdr *h, const u_char *b
 
 	double time = (h->ts.tv_sec - start_s) + (h->ts.tv_usec - start_ms) / 1000000.0;
 	printf("%.4lf FRAME %u (%i bytes)", time, pkt_nb, h->len);
-//	parse_ethernet(bytes);
+	parse_ethernet(bytes + 2, analyzer);
 	printf("\n");
 	pkt_nb++;
 }
@@ -39,11 +40,18 @@ void    create_filter(t_analyzer *analyzer) {
 }
 
 void    start_analysis(t_analyzer *analyzer) {
-    if (analyzer->info.filter != NULL)
+    int     ret;
+    char    *error_message;
+    
+    if (analyzer->info.filter != NULL) {
         create_filter(analyzer);
-
-	int ret = pcap_loop(analyzer->handle, 0, packet_call_back, NULL);
-
+    }
+	ret = pcap_loop(analyzer->handle, 0, packet_call_back, (u_char *)analyzer);
     pcap_close(analyzer->handle);
+
+    if (ret == PCAP_ERROR || ret == PCAP_ERROR_BREAK) {
+		error_message = pcap_geterr(analyzer->handle);
+        exit_failure(analyzer, "%sError : %s%s\n", CSI_RED, error_message, CSI_RESET);
+	}
 
 }
