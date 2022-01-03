@@ -11,7 +11,15 @@
 
 
 void	parse_dns(const unsigned char *packet, t_analyzer *analyzer) {
-	
+    (void)packet;
+    if (analyzer->info.verbosity == 1) {
+        printf("\t\t\t%sDNS NOT IMPLEMENTED%s", CSI_PURPLE, CSI_RESET);
+    }
+    else if (analyzer->info.verbosity == 2) {
+        printf("\t\t\t%sDNS NOT IMPLEMENTED%s\n", CSI_PURPLE, CSI_RESET);
+    } else {
+        printf("\t\t\t%sDNS NOT IMPLEMENTED%s\n", CSI_PURPLE, CSI_RESET);
+    }
 }
 
 void parse_tcp(const unsigned char *packet, uint16_t size, t_analyzer *analyzer) {

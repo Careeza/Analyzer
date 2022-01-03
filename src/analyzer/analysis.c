@@ -1,6 +1,8 @@
 #include "analyzer.h"
 #include "utils.h"
 #include "parser.h"
+#include <stdlib.h>
+#include <string.h>
 
 void packet_call_back(u_char *user, const struct pcap_pkthdr *h, const u_char *bytes) {	
 	static unsigned int		pkt_nb = 1;
@@ -16,7 +18,11 @@ void packet_call_back(u_char *user, const struct pcap_pkthdr *h, const u_char *b
 
 	double time = (h->ts.tv_sec - start_s) + (h->ts.tv_usec - start_ms) / 1000000.0;
 	printf("%.4lf FRAME %u (%i bytes)", time, pkt_nb, h->len);
-	parse_ethernet(bytes + 2, analyzer);
+	if (strcmp("any", analyzer->info.name) == 0) {
+        parse_ethernet(bytes + 2, analyzer);
+    } else {
+        parse_ethernet(bytes, analyzer);
+    }
 	printf("\n");
 	pkt_nb++;
 }

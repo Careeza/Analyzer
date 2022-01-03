@@ -126,19 +126,19 @@ void    print_arp(const unsigned char *packet, t_analyzer *analyzer) {
     type = (ar_op == ARPOP_REPLY || ar_op == ARPOP_REQUEST ? "ARP" : "RARP");
 
     if (analyzer->info.verbosity == 1) {
-        printf("%s%s%s, [ ", CSI_YELLOW, analyzer->protocol, CSI_RESET);
+        printf("%s%s%s, [ ", CSI_YELLOW, type, CSI_RESET);
         ar_op == ARPOP_REQUEST ? printf("request ]\n") : (void)0;
         ar_op == ARPOP_REPLY ? printf("reply ]\n") : (void)0;
         ar_op == ARPOP_RREQUEST ? printf("reverse request ]\n") : (void)0;
         ar_op == ARPOP_RREPLY ? printf("reverse reply ]\n") : (void)0;
     } else if (analyzer->info.verbosity == 2) {
-        printf("\t%s%s%s, [ ", CSI_YELLOW, analyzer->protocol, CSI_RESET);
+        printf("\t%s%s%s, [ ", CSI_YELLOW, type, CSI_RESET);
         ar_op == ARPOP_REQUEST ? printf("request ]\n") : (void)0;
         ar_op == ARPOP_REPLY ? printf("reply ]\n") : (void)0;
         ar_op == ARPOP_RREQUEST ? printf("reverse request ]\n") : (void)0;
         ar_op == ARPOP_RREPLY ? printf("reverse reply ]\n") : (void)0;
     } else {
-        printf("\t%s%s%s\n", CSI_YELLOW, analyzer->protocol, CSI_RESET);
+        printf("\t%s%s%s\n", CSI_YELLOW, type, CSI_RESET);
         printf("\t%s%-15s%s%04X\n", CSI_YELLOW, "HRD", CSI_RESET, ntohs(hdr->ar_hrd));
         printf("\t%s%-15s%s%04X\n", CSI_YELLOW, "PROTOCOL", CSI_RESET, ntohs(hdr->ar_pro));
         printf("\t%s%-15s%s%u\n", CSI_YELLOW, "HLN: ", CSI_RESET, hdr->ar_hln);
@@ -212,58 +212,12 @@ void    print_udp(const unsigned char *packet, t_analyzer *analyzer) {
 
 void    print_bootp(const unsigned char *packet, t_analyzer *analyzer) {
     struct          bootp_hdr *hdr = (struct bootp_hdr *)packet;
-    const char      *dhcp_msg = NULL;
     bool            dhcp = false;
-    int             i = 4;
 
     if (hdr->vend[0] == 99 && hdr->vend[1] == 130 && hdr->vend[2] == 83 &&
 		hdr->vend[3] == 99) {
 		dhcp = true;
     }
-
-	// struct bootp_option *bopt = (struct bootp_option *)(hdr->vend + 4);
-    // while (dhcp && bopt->code != TAG_END) {
-    //     log_format("%-30s", bootp_options_name[bopt->code].name);
-    //     if (bopt->code == TAG_DHCP_MESSAGE) {
-    //         dhcp_msg = dhcp_messages[bopt->data[0]];
-    //         //log_format("%s", dhcp_messages[bopt->data[0]]);
-    //     } else if (bopt->code == TAG_SERVER_SIP) {
-    //         if (bopt->data[0] == 1) {
-    //             // log_addr(*((u_int32_t *)(bopt->data + 1)));
-    //         }
-    //     } else {
-    //         switch (bootp_options_name[bopt->code].displaytype) {
-    //         case PRINT_STR:
-    //             log_buf(bopt->data, bopt->len);
-    //             break;
-    //         case PRINT_IP:
-    //             for (int j = 0; j < bopt->len; j += 4) {
-    //                 log_addr(*((u_int32_t *)bopt->data));
-    //                 log_format(" ");
-    //             }
-    //             break;
-    //         case PRINT_UINT_32:
-    //             log_format("%u", ntohl(*((u_int32_t *)bopt->data)));
-    //             break;
-    //         case PRINT_HEX:
-    //             log_format("0x");
-    //             for (int j = 0; j < bopt->len; j += 4) {
-    //                 log_format("%02x", bopt->data[j]);
-    //             }
-    //             break;
-    //         default:
-    //             for (int j = 0; j < bopt->len; j++) {
-    //                 log_format("%hu", bopt->data[j]);
-    //             }
-    //             break;
-    //         }
-    //     }
-    //     log_format("\n");
-
-    //     i += bopt->len + 2;
-
-    //     bopt = (struct bootp_option *)(hdr->vend + i);
-    // }
     if (analyzer->info.verbosity == 1) {
         printf(", %s%s%s", CSI_PURPLE, dhcp ? "DHCP" : "BOOTP", CSI_RESET);
     } else if (analyzer->info.verbosity == 2) {
