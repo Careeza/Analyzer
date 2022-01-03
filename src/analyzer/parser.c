@@ -98,12 +98,12 @@ void	parse_ethernet(const unsigned char *packet, t_analyzer *analyzer) {
     case ETH_P_ARP:
         analyzer->format = "ARP";
         print_ethernet(packet, analyzer);
-        //parse_arp(packet + sizeof(struct ethhdr));
+        print_arp(packet + sizeof(struct ethhdr), analyzer);
         break;
     case ETH_P_RARP:
         analyzer->format = "RARP";
         print_ethernet(packet, analyzer);
-        //parse_arp(packet + sizeof(struct ethhdr));
+        print_arp(packet + sizeof(struct ethhdr), analyzer);
         break;
     default:
         analyzer->format = "Unsupported";

@@ -8,13 +8,14 @@
 #include <stdbool.h>
 #include <netinet/ip.h>
 #include <netinet/ip6.h>
+#include <net/if_arp.h>
 #include <netinet/tcp.h>
 #include <netinet/udp.h>
 #include <unistd.h>
 
 #define UDP_HEADER_SIZE 8
 
-void print_mac_addr(unsigned char *addr, bool new_line) {
+void    print_mac_addr(unsigned char *addr, bool new_line) {
 	printf("%02x", addr[0]);
 	for (int i = 1; i < ETH_ALEN; i++) {
 		printf(":%02x", addr[i]);
@@ -22,6 +23,25 @@ void print_mac_addr(unsigned char *addr, bool new_line) {
     if (new_line) {
         printf("\n");
     }
+}
+
+void    print_payload_addr(uint16_t len, const uint8_t *payload) {
+    if (len == 6) {
+		printf("%02x:%02x:%02x:%02x:%02x:%02x\n", payload[0], payload[1],
+				   payload[2], payload[3], payload[4], payload[5]);
+	} else if (len == 1) {
+		printf("%02x (TOKEN RING)\n", payload[0]);
+	}
+}
+
+void    print_addr(uint16_t len, const uint8_t *payload) {
+	if (len == 4) {
+        char str[INET_ADDRSTRLEN];
+        printf("%s\n", inet_ntop(AF_INET, payload, str, INET_ADDRSTRLEN));
+	} else if (len == 16) {
+        char str[INET6_ADDRSTRLEN];
+        printf("%s\n", inet_ntop(AF_INET6, payload, str, INET6_ADDRSTRLEN));
+	}
 }
 
 void    print_ethernet(const unsigned char *packet, t_analyzer *analyzer) {
@@ -96,6 +116,53 @@ void    print_ipv6(const unsigned char *packet, t_analyzer *analyzer) {
         printf("\t%s%-15s%s%s\n", CSI_YELLOW, "SRC ADDR", CSI_RESET, inet_ntop(AF_INET6, &(hdr->ip6_src), str, INET6_ADDRSTRLEN));
         printf("\t%s%-15s%s%s\n", CSI_YELLOW, "DST ADDR", CSI_RESET, inet_ntop(AF_INET6, &(hdr->ip6_src), str, INET6_ADDRSTRLEN));
     }
+}
+
+void    print_arp(const unsigned char *packet, t_analyzer *analyzer) {
+    struct arphdr   *hdr = (struct arphdr *)packet;
+	char            *type;
+    uint16_t        ar_op = ntohs(hdr->ar_op);
+
+    type = (ar_op == ARPOP_REPLY || ar_op == ARPOP_REQUEST ? "ARP" : "RARP");
+
+    if (analyzer->info.verbosity == 1) {
+        printf("%s%s%s, [ ", CSI_YELLOW, analyzer->protocol, CSI_RESET);
+        ar_op == ARPOP_REQUEST ? printf("request ]\n") : (void)0;
+        ar_op == ARPOP_REPLY ? printf("reply ]\n") : (void)0;
+        ar_op == ARPOP_RREQUEST ? printf("reverse request ]\n") : (void)0;
+        ar_op == ARPOP_RREPLY ? printf("reverse reply ]\n") : (void)0;
+    } else if (analyzer->info.verbosity == 2) {
+        printf("\t%s%s%s, [ ", CSI_YELLOW, analyzer->protocol, CSI_RESET);
+        ar_op == ARPOP_REQUEST ? printf("request ]\n") : (void)0;
+        ar_op == ARPOP_REPLY ? printf("reply ]\n") : (void)0;
+        ar_op == ARPOP_RREQUEST ? printf("reverse request ]\n") : (void)0;
+        ar_op == ARPOP_RREPLY ? printf("reverse reply ]\n") : (void)0;
+    } else {
+        printf("\t%s%s%s\n", CSI_YELLOW, analyzer->protocol, CSI_RESET);
+        printf("\t%s%-15s%s%04X\n", CSI_YELLOW, "HRD", CSI_RESET, ntohs(hdr->ar_hrd));
+        printf("\t%s%-15s%s%04X\n", CSI_YELLOW, "PROTOCOL", CSI_RESET, ntohs(hdr->ar_pro));
+        printf("\t%s%-15s%s%u\n", CSI_YELLOW, "HLN: ", CSI_RESET, hdr->ar_hln);
+        printf("\t%s%-15s%s%u\n", CSI_YELLOW, "PLN: ", CSI_RESET, hdr->ar_pln);
+        printf("\t%s%-15s%s%u[ ", CSI_YELLOW, "OP: ", CSI_RESET, ar_op);
+        ar_op == ARPOP_REQUEST ? printf("request ]\n") : (void)0;
+        ar_op == ARPOP_REPLY ? printf("reply ]\n") : (void)0;
+        ar_op == ARPOP_RREQUEST ? printf("reverse request ]\n") : (void)0;
+        ar_op == ARPOP_RREPLY ? printf("reverse reply ]\n") : (void)0;
+    
+        packet += sizeof(struct arphdr);
+        printf("\t%s%-15s%s", CSI_YELLOW, "SENDER HLN: ", CSI_RESET);
+        print_payload_addr(hdr->ar_hln, packet);
+        packet += hdr->ar_hln;
+        printf("\t%s%-15s%s", CSI_YELLOW, "SENDER PLN: ", CSI_RESET);
+        print_addr(hdr->ar_pln, packet);
+        packet += hdr->ar_pln;
+        printf("\t%s%-15s%s", CSI_YELLOW, "TARGET HLN: ", CSI_RESET);
+        print_payload_addr(hdr->ar_hln, packet);
+        packet += hdr->ar_hln;
+        printf("\t%s%-15s%s", CSI_YELLOW, "TARGET PLN: ", CSI_RESET);
+        print_addr(hdr->ar_pln, packet);
+    }
+
 }
 
 void    print_tcp(const unsigned char *packet, t_analyzer *analyzer) {
